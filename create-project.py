@@ -88,12 +88,22 @@ def download_charmm36m_from_github(dest, ff):
                         with z.open(member) as source, open(dest_path, "wb") as target:
                             shutil.copyfileobj(source, target)
             # TOPPAR files
-            if "create_project-main/toppar/CHARMM36m/" in member:
+            elif "create_project-main/toppar/CHARMM36m/" in member:
                 filename = os.path.basename(member)
                 if filename:
                     rel_path = member.split("toppar/CHARMM36m/")[-1]
                     if rel_path:
                         dest_path = os.path.join(dest, "toppar", rel_path)
+                        os.makedirs(os.path.dirname(dest_path), exist_ok=True)
+                        with z.open(member) as source, open(dest_path, "wb") as target:
+                            shutil.copyfileobj(source, target)
+            # Scripts
+            elif "create_project-main/scripts/" in member:
+                filename = os.path.basename(member)
+                if filename:
+                    rel_path = member.split("scripts/")[-1]
+                    if rel_path:
+                        dest_path = os.path.join(dest, "scripts", rel_path)
                         os.makedirs(os.path.dirname(dest_path), exist_ok=True)
                         with z.open(member) as source, open(dest_path, "wb") as target:
                             shutil.copyfileobj(source, target)

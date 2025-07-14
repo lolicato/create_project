@@ -1,0 +1,19 @@
+Metadata-Version: 2.4
+Name: start-md-project
+Version: 0.1.0
+Summary: A tool to easily create MD project templates
+Home-page: https://github.com/yourusername/start-md-project
+Author: Fabio Lolicato
+Author-email: lolicato.fabio@gmail.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: Apache License 2.0
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+License-File: LICENSE.txt
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: home-page
+Dynamic: license-file
+Dynamic: requires-python
+Dynamic: summary

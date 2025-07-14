@@ -68,9 +68,9 @@ def copy_charmm_files(src, dest, ff):
             else:
                 shutil.copy(s, d)
 
-def download_charmm36m_from_github(dest, ff):
+def download_ff_from_github(dest, ff):
     zip_url = "https://github.com/lolicato/create_project/archive/refs/heads/main.zip"
-    print("Downloading CHARMM36m files from GitHub...")
+    print(f"Downloading {ff} files from GitHub...")
     response = requests.get(zip_url)
     if response.status_code != 200:
         raise RuntimeError("Failed to download from GitHub.")
@@ -78,20 +78,20 @@ def download_charmm36m_from_github(dest, ff):
     with zipfile.ZipFile(BytesIO(response.content)) as z:
         for member in z.namelist():
             # MDP files
-            if "create_project-main/mdp/CHARMM36m/" in member:
+            if f"create_project-main/mdp/{ff}/" in member:
                 filename = os.path.basename(member)
                 if filename:
-                    rel_path = member.split("mdp/CHARMM36m/")[-1]
+                    rel_path = member.split(f"mdp/{ff}/")[-1]
                     if rel_path:
                         dest_path = os.path.join(dest, f"mdp/{ff}", rel_path)
                         os.makedirs(os.path.dirname(dest_path), exist_ok=True)
                         with z.open(member) as source, open(dest_path, "wb") as target:
                             shutil.copyfileobj(source, target)
             # TOPPAR files
-            elif "create_project-main/toppar/CHARMM36m/" in member:
+            elif f"create_project-main/toppar/{ff}/" in member:
                 filename = os.path.basename(member)
                 if filename:
-                    rel_path = member.split("toppar/CHARMM36m/")[-1]
+                    rel_path = member.split(f"toppar/{ff}/")[-1]
                     if rel_path:
                         dest_path = os.path.join(dest, "toppar", rel_path)
                         os.makedirs(os.path.dirname(dest_path), exist_ok=True)
@@ -133,8 +133,8 @@ def main():
 
     args = parser.parse_args()
 
-    # Select forcefield (currently only CHARMM36m)
-    available_ffs = ["CHARMM36m"]
+    # Select forcefield (now supports multiple options)
+    available_ffs = ["CHARMM36m", "MARTINI2.2", "MARTINI3"]
     print("Available force fields:")
     for i, ff in enumerate(available_ffs, 1):
         print(f"  {i}. {ff}")
@@ -163,11 +163,10 @@ def main():
     else:
         choice = input(f"Download {ff} files from GitHub? [Y/n]: ").lower()
         if choice in ["", "y", "yes"]:
-            download_charmm36m_from_github(project_path, ff)
+            download_ff_from_github(project_path, ff)
 
     write_readme(project_path, ff)
     print("Done.")
 
 if __name__ == "__main__":
     main()
-

@@ -1,0 +1,104 @@
+#!/bin/bash
+
+set -euo pipefail
+
+# Path to mdp folder
+mdp="../../../mdp"
+# Initial structure
+input="../step5_input.gro"
+
+# Required files in current directory
+TOPOL="topol.top"
+INDEX="index.ndx"
+
+# Check for topology and index
+[[ -f "$TOPOL" ]] || { echo "ERROR: $TOPOL not found"; exit 1; }
+[[ -f "$INDEX" ]] || { echo "ERROR: $INDEX not found"; exit 1; }
+
+# Resolve absolute paths
+TOPOL_ABS="$(realpath $TOPOL)"
+INDEX_ABS="$(realpath $INDEX)"
+
+# Function to run a GROMACS em step inside its own directory
+run_em() {
+    local step_name=$1
+    local mdp_file=$2
+    local in_gro=$3
+    local out_dir=$4
+
+    mkdir -p "$out_dir"
+    pushd "$out_dir" > /dev/null
+
+    echo "Running $step_name in $out_dir..."
+    gmx grompp -f "$mdp_file" -o "${step_name}.tpr" -c "$in_gro" -r "$in_gro" -p "$TOPOL_ABS" -n "$INDEX_ABS"
+    gmx mdrun -v -deffnm "$step_name"
+
+    popd > /dev/null
+}
+
+# Function to run a GROMACS step inside its own directory
+run_eq_step() {
+    local step_name=$1
+    local mdp_file=$2
+    local in_gro=$3
+    local out_dir=$4
+
+    mkdir -p "$out_dir"
+    pushd "$out_dir" > /dev/null
+
+    echo "Running $step_name in $out_dir..."
+    gmx grompp -f "$mdp_file" -o "${step_name}.tpr" -c "$in_gro" -r "$in_gro" -p "$TOPOL_ABS" -n "$INDEX_ABS"
+    gmx mdrun -v -deffnm "$step_name" -nsteps 2
+
+    popd > /dev/null
+}
+
+# Function to run a GROMACS step inside its own directory
+run_prod() {
+    local step_name=$1
+    local mdp_file=$2
+    local in_gro=$3
+    local out_dir=$4
+
+    mkdir -p "$out_dir"
+    pushd "$out_dir" > /dev/null
+
+    echo "Running $step_name in $out_dir..."
+    gmx grompp -f "$mdp_file" -o "${step_name}.tpr" -c "$in_gro" -r "$in_gro" -p "$TOPOL_ABS" -n "$INDEX_ABS"
+    gmx mdrun -v -deffnm "$step_name" -nsteps 2
+
+    popd > /dev/null
+}
+
+grompp_prod() {
+    local step_name=$1
+    local mdp_file=$2
+    local in_gro=$3
+    local out_dir=$4
+
+    mkdir -p "$out_dir"
+    pushd "$out_dir" > /dev/null
+
+    echo "Running $step_name in $out_dir..."
+    gmx grompp -f "$mdp_file" -o "${step_name}.tpr" -c "$in_gro" -r "$in_gro" -p "$TOPOL_ABS" -n "$INDEX_ABS"
+
+    popd > /dev/null
+}
+
+# 01 - Energy Minimization
+run_em "em" "${mdp}/em.mdp" "$input" "01-EM"
+input="../01-EM/em.gro"
+
+# 02–07 - Equilibration
+for i in {1..6}; do
+    step_id=$(printf "%02d" $((i + 1)))
+    step_name="eq_${i}"
+    dir_name="${step_id}-EQ_${i}"
+
+    run_eq_step "$step_name" "${mdp}/${step_name}.mdp" "$input" "$dir_name"
+    input=../"${dir_name}/${step_name}.gro"
+done
+
+# 08 - Production MD
+#run_prod "md" "${mdp}/md.mdp" "$input" "08-PROD"
+grompp_prod "md" "${mdp}/md.mdp" "$input" "08-PROD"

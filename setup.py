@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='start_md_project',
-    version='0.1.4',
+    version='0.1.5',
     description='A tool to easily create MD project templates',
     author='Fabio Lolicato',
     author_email='lolicato.fabio@gmail.com',

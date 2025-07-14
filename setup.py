@@ -11,7 +11,7 @@ setup(
     install_requires=[],  # Add dependencies here
     entry_points={
         'console_scripts': [
-            'start-md-project=createMDproject.__main__:main',
+            'start-md-project=start-md-project.__main__:main',
         ],
     },
     classifiers=[

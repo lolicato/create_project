@@ -1,17 +1,17 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='start-md-project',
+    name='start_md_project',
     version='0.1.0',
     description='A tool to easily create MD project templates',
     author='Fabio Lolicato',
     author_email='lolicato.fabio@gmail.com',
-    url='https://github.com/yourusername/start-md-project',
+    url='https://github.com/lolicato/start_md_project',
     packages=find_packages(),
     install_requires=[],  # Add dependencies here
     entry_points={
         'console_scripts': [
-            'start-md-project=start_md_project.__main__:main',
+            'start_md_project=start_md_project.__main__:main',
         ],
     },
     classifiers=[

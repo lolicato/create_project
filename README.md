@@ -4,8 +4,8 @@
 This tool helps you **quickly initialize a molecular dynamics (MD) project** with a standardized folder structure and naming conventions for both **protein-only** and **protein–membrane** simulations.
 
 ```
-pip install start-md-project
-start-md-project name_of_project
+pip install start_md_project
+start_md_project name_of_project
 ```
 
 It supports the following force fields:

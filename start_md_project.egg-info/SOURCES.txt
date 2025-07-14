@@ -1,7 +1,7 @@
 LICENSE.txt
 README.md
 setup.py
-start-md-project/__init__.py
+start_md_project/__init__.py
 start_md_project.egg-info/PKG-INFO
 start_md_project.egg-info/SOURCES.txt
 start_md_project.egg-info/dependency_links.txt

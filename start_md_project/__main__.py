@@ -69,7 +69,7 @@ def copy_charmm_files(src, dest, ff):
                 shutil.copy(s, d)
 
 def download_ff_from_github(dest, ff):
-    zip_url = "https://github.com/lolicato/create_md_project/archive/refs/heads/main.zip"
+    zip_url = "https://github.com/lolicato/start_md_project/archive/refs/heads/main.zip"
     print(f"Downloading {ff} files from GitHub...")
     response = requests.get(zip_url)
     if response.status_code != 200:
@@ -78,7 +78,7 @@ def download_ff_from_github(dest, ff):
     with zipfile.ZipFile(BytesIO(response.content)) as z:
         for member in z.namelist():
             # MDP files
-            if f"create_md_project-main/mdp/{ff}/" in member:
+            if f"start_md_project-main/mdp/{ff}/" in member:
                 filename = os.path.basename(member)
                 if filename:
                     rel_path = member.split(f"mdp/{ff}/")[-1]
@@ -88,7 +88,7 @@ def download_ff_from_github(dest, ff):
                         with z.open(member) as source, open(dest_path, "wb") as target:
                             shutil.copyfileobj(source, target)
             # TOPPAR files
-            elif f"create_md_project-main/toppar/{ff}/" in member:
+            elif f"start_md_project-main/toppar/{ff}/" in member:
                 filename = os.path.basename(member)
                 if filename:
                     rel_path = member.split(f"toppar/{ff}/")[-1]
@@ -98,7 +98,7 @@ def download_ff_from_github(dest, ff):
                         with z.open(member) as source, open(dest_path, "wb") as target:
                             shutil.copyfileobj(source, target)
             # Scripts
-            elif "create_md_project-main/scripts/" in member:
+            elif "start_md_project-main/scripts/" in member:
                 filename = os.path.basename(member)
                 if filename:
                     rel_path = member.split("scripts/")[-1]

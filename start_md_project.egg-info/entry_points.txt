@@ -1,2 +1,2 @@
 [console_scripts]
-start-md-project = start_md_project.__main__:main
+start_md_project = start_md_project.__main__:main
